@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
           appBar: AppBar(title: Text('Ai Assistant')),
-          body: const SafeArea(child: AiAssistantClient(token: 'd754bc66-0db3-41f3-b666-09bf083ae7b2'))),
+          body: const SafeArea(child: AiAssistantClient(token: '234fdsg45g-0db3-41f3-b666-43rqe43r2fsdg'))),
     );
   }
 }
