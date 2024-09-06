@@ -11,17 +11,27 @@ class AiAssistantClient extends StatefulWidget {
   final Color accentColor;
   final Color primaryColor;
   final Widget? sendIcon;
+  final String? initMessage;
+  final String? placeholder;
 
   const AiAssistantClient(
       {super.key,
       required this.token,
       this.accentColor = Colors.blueAccent,
       this.primaryColor = Colors.black12,
-      this.sendIcon});
+      this.sendIcon,
+      this.initMessage,
+      this.placeholder});
 
   @override
   _AiAssistantClientState createState() {
     return _AiAssistantClientState();
+  }
+
+  static void logOut() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('cachedMessagesAiClientSDK');
+    prefs.remove('cachedUUIDAiClientSDK');
   }
 }
 
@@ -63,6 +73,7 @@ class _AiAssistantClientState extends State<AiAssistantClient> {
           child: ListView(
             controller: _controller,
             padding: EdgeInsets.zero,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             children: <Widget>[
               ..._messages.map((e) => Container(
                     margin: EdgeInsets.only(
@@ -94,15 +105,12 @@ class _AiAssistantClientState extends State<AiAssistantClient> {
                       decoration: BoxDecoration(color: widget.primaryColor, borderRadius: BorderRadius.circular(12)),
                       child: const Row(
                         children: [
-                          Text(
-                            'Печатает...',
-                            style: TextStyle(color: Colors.black),
-                          ),
                           SizedBox(width: 8),
                           SizedBox(
                               height: 16,
                               width: 16,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.grey))
+                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.grey)),
+                          SizedBox(width: 8),
                         ],
                       ),
                     ),
@@ -129,7 +137,7 @@ class _AiAssistantClientState extends State<AiAssistantClient> {
               decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(vertical: 8),
                   border: InputBorder.none,
-                  hintText: 'Введите свой комментарий',
+                  hintText: widget.placeholder ?? 'Сообщение',
                   focusedBorder: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   errorBorder: InputBorder.none,
@@ -172,6 +180,8 @@ class _AiAssistantClientState extends State<AiAssistantClient> {
         setState(() {});
         _scrollDown();
       } catch (e) {}
+    } else if ((widget.initMessage ?? '').isNotEmpty) {
+      await sendMessageToServer(widget.initMessage!);
     }
   }
 
