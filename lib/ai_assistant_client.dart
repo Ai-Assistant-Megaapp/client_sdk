@@ -37,7 +37,7 @@ class AiAssistantClient extends StatefulWidget {
 
 class _AiAssistantClientState extends State<AiAssistantClient> {
   final _uuidGenerator = const Uuid();
-  final String _serverUrl = 'https://limitless-lowlands-03072-df3c240ae61d.herokuapp.com/webhook/client_sdk';
+  final String _serverUrl = 'https://ai.airun.one/webhook/client_sdk';
   final TextEditingController _comment = TextEditingController();
   final ScrollController _controller = ScrollController();
   List<MessageModel> _messages = List.empty(growable: true);
